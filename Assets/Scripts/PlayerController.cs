@@ -10,13 +10,13 @@ public class PlayerController : MonoBehaviour
     public float speed = 8.0f;
     public float xRange = 8;
     public float yRange = 4;
-
-
+    public GameObject squidInkPrefab;
+    public GameManager gameManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -52,5 +52,30 @@ public class PlayerController : MonoBehaviour
         verticalInput = Input.GetAxis("Vertical");
         transform.Translate(Vector3.up * verticalInput * Time.deltaTime * speed);
 
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            //Launch a projectile pizza from the player
+            Instantiate(squidInkPrefab, transform.position, squidInkPrefab.transform.rotation);
+        }
+
     }
+
+    public void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Ship"))
+        {
+            gameManager.UpdateScore();
+        }
+
+        if (other.gameObject.CompareTag("Bullet"))
+        {
+            gameManager.UpdateHealth();
+        }
+
+        Destroy(other.gameObject);
+    }
+
+
+
 }
