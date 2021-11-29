@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -56,24 +56,32 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             //Launch a projectile pizza from the player
-            Instantiate(squidInkPrefab, transform.position, squidInkPrefab.transform.rotation);
+            Instantiate(squidInkPrefab, transform.position, transform.rotation);
         }
 
     }
 
     public void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Ship"))
+
+        Debug.Log("Collided");
+
+        if (!other.gameObject.CompareTag("SquidInk"))
         {
-            gameManager.UpdateScore();
+            if (other.gameObject.CompareTag("Ship"))
+            {
+                gameManager.UpdateScore(10);
+            }
+
+            if (other.gameObject.CompareTag("Bullet"))
+            {
+                gameManager.UpdateHealth();
+            }
+
+            Destroy(other.gameObject);
         }
 
-        if (other.gameObject.CompareTag("Bullet"))
-        {
-            gameManager.UpdateHealth();
-        }
 
-        Destroy(other.gameObject);
     }
 
 

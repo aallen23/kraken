@@ -8,16 +8,16 @@ public class SpawnBullet : MonoBehaviour
 
     public GameObject bullet;
     public GameObject shipObject;
-    private Rigidbody bulletRb;
+    private Rigidbody2D bulletRb;
     private Vector3 spawnPos;
-    public float bulletSpawnRate = 1.0f;
+    public float bulletSpawnRate = 0.5f;
 
     // Start is called before the first frame update
     void Start()
     {
         shipObject = this.gameObject;
-        bulletRb = GetComponent<Rigidbody>();
-        bulletRb.AddForce(Vector3.forward * 1000);
+        bulletRb = GetComponent<Rigidbody2D>();
+        bulletRb.AddForce(Vector3.forward * 500);
         StartCoroutine(Bullet());
     }
 

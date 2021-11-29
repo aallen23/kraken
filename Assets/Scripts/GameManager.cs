@@ -9,22 +9,30 @@ public class GameManager : MonoBehaviour
 
     public GameObject[] shipPrefabs;
     
-    private float startDelay = 2;
+    //private float startDelay = 2;
     private float spawnRate = 2;
-    private float spawnRangeX;
-    private float spawnRangeY;
+    private float spawnRangeX = 8;
+    private float spawnRangeY = 4;
 
     private int playerScore;
     private bool gameOver;
+    private int healthIndex = 4;
 
     public TextMeshProUGUI scoreText;
     public GameObject titleScreen;
+    public GameObject gameScreen;
+    public GameObject healthBar;
+    public GameObject gameOverScreen;
+    public TextMeshProUGUI finalScoreText;
+
+
+    //public Button startButton;
+    //public Button quitButton;
 
     // Start is called before the first frame update
     void Start()
     {
-        StartGame();
-        InitiateUI();
+        
     }
 
     // Update is called once per frame
@@ -33,19 +41,40 @@ public class GameManager : MonoBehaviour
         
     }
 
+    public void OnStartButtonPress()
+    {
+        
+        StartGame();
+    }
+
+    public void OnQuitButtonPress()
+    {
+        Application.Quit();
+    }
+
     public void StartGame()
     {
+
+        titleScreen.SetActive(false);
+        gameOverScreen.SetActive(false);
+
+        if (healthIndex < 4)
+        {
+            for (int i = 0; i < healthBar.transform.childCount; i++)
+            {
+                healthBar.transform.GetChild(i).gameObject.SetActive(true);
+            }
+            healthIndex = 4;
+        }
+
         gameOver = false;
         playerScore = 0;
-        //add time delay and control overlay
+        scoreText.text = "Score: " + playerScore;
+        gameScreen.SetActive(true);
         StartCoroutine(SpawnEnemy());
     }
 
 
-    public void InitiateUI()
-    {
-        scoreText.text = "Score: " + playerScore;
-    }
 
     //change spawn position to always outside the screen
     private Vector3 GenerateSpawnPosition()
@@ -67,20 +96,33 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void UpdateScore()
+    public void UpdateScore(int scoreToAdd)
     {
-        playerScore += 10;
+        playerScore += scoreToAdd;
         scoreText.text = "Score: " + playerScore;
     }
 
     public void UpdateHealth()
     {
+        Debug.Log("health updated");
+        if (healthIndex > 0 && gameOver == false)
+        {
+            healthBar.transform.GetChild(healthIndex).gameObject.SetActive(false);
+            healthIndex -= 1;
+        }
+        else
+        {
+            gameOver = true;
+            GameOver();
+        }
 
     }
 
     public void GameOver()
     {
-
+        finalScoreText.text = "Final Score: " + playerScore;
+        gameScreen.SetActive(false);
+        gameOverScreen.SetActive(true);
     }
 
 }

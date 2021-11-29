@@ -8,7 +8,7 @@ public class ObjectMovement : MonoBehaviour
     //movement script tied to ship objects
 
 
-    public float speed = 10.0f;
+    public float speed = 3.0f;
     private float xRange = 10;
     private float yRange = 5;
 
@@ -19,7 +19,7 @@ public class ObjectMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         healthHits = 0;
     }
 
@@ -32,11 +32,13 @@ public class ObjectMovement : MonoBehaviour
         if (transform.position.x < -xRange || transform.position.x > xRange)
         {
             Destroy(gameObject);
+            gameManager.UpdateHealth();
         }
 
         if (transform.position.y < -yRange || transform.position.y > yRange)
         {
             Destroy(gameObject);
+            gameManager.UpdateHealth();
         }
 
 
@@ -54,7 +56,7 @@ public class ObjectMovement : MonoBehaviour
         else if (other.gameObject.CompareTag("SquidInk") && healthHits == 1)
         {
             Destroy(gameObject);
-            gameManager.UpdateScore();
+            gameManager.UpdateScore(10);
         }
 
     }
