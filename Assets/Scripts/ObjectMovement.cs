@@ -9,10 +9,8 @@ public class ObjectMovement : MonoBehaviour
 
 
     public float speed = 3.0f;
-    private float xRange = 10;
-    private float yRange = 5;
-
-    private int healthHits;
+    private float xRange = 15;
+    private float yRange = 12;
 
     public GameManager gameManager;
 
@@ -20,7 +18,7 @@ public class ObjectMovement : MonoBehaviour
     void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        healthHits = 0;
+    
     }
 
     // Update is called once per frame
@@ -47,17 +45,12 @@ public class ObjectMovement : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D other)
     {
 
-        if (other.gameObject.CompareTag("SquidInk") && healthHits == 0)
-        {
-            speed -= 5;
-            healthHits += 1;
-        }
-
-        else if (other.gameObject.CompareTag("SquidInk") && healthHits == 1)
+        if (other.gameObject.CompareTag("SquidInk"))
         {
             Destroy(gameObject);
             gameManager.UpdateScore(10);
         }
+
 
     }
 }

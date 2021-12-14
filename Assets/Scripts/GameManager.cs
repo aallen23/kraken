@@ -8,11 +8,12 @@ public class GameManager : MonoBehaviour
 {
 
     public GameObject[] shipPrefabs;
+    public GameObject[] spawnPoints;
     
     //private float startDelay = 2;
     private float spawnRate = 2;
-    private float spawnRangeX = 8;
-    private float spawnRangeY = 4;
+   // private float spawnRangeX = 8;
+   // private float spawnRangeY = 4;
 
     private int playerScore;
     private bool gameOver;
@@ -77,22 +78,23 @@ public class GameManager : MonoBehaviour
 
 
     //change spawn position to always outside the screen
-    private Vector3 GenerateSpawnPosition()
-    {
-        float spawnPosX = Random.Range(-spawnRangeX, spawnRangeX);
-        float spawnPosY = Random.Range(-spawnRangeY, spawnRangeY);
-        Vector3 randomPos = new Vector3(spawnPosX, spawnPosY, 0);
-        return randomPos;
-    }
+    //private Vector3 GenerateSpawnPosition()
+    //{
+    //    float spawnPosX = Random.Range(-spawnRangeX, spawnRangeX);
+    //    float spawnPosY = Random.Range(-spawnRangeY, spawnRangeY);
+    //    Vector3 randomPos = new Vector3(spawnPosX, spawnPosY, 0);
+    //    return randomPos;
+    //}
 
     //update spawnrate as difficulty progresses
     IEnumerator SpawnEnemy()
     {
         while (!gameOver)
         {
+            int spawnIndex = Random.Range(0, spawnPoints.Length);
             yield return new WaitForSeconds(spawnRate);
             int index = Random.Range(0, shipPrefabs.Length);
-            Instantiate(shipPrefabs[index], GenerateSpawnPosition(), shipPrefabs[index].transform.rotation);
+            Instantiate(shipPrefabs[index], spawnPoints[spawnIndex].transform.position, spawnPoints[spawnIndex].transform.rotation);
         }
     }
 
